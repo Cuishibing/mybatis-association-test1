@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wooread.mybatisstudy.mapper.UserMapper">
+    <resultMap type="User" id="User">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <association property="userInfo" column="user_info_id" select="com.wooread.mybatisstudy.mapper.UserInfoMapper.selectById"/>
+    </resultMap>
+    
+    <sql id="user_columns">
+        user_id,user_name,password,user_info_id
+    </sql>
+    
+    <select id="selectById" resultMap="User">
+        select <include refid="user_columns"/> from user where user_id = #{userId}
+    </select>
+    
+</mapper>

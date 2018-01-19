@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+<!-- Mybatis的配置項不能顛倒，如果顛倒就會在啟動的過程中報錯 -->
+<configuration><!-- Mybatis配置的根标签 -->
+
+    <!-- 
+        properties屬性可以給系統配置一些運行參數，可以放在xml文件或者properties文件中，方便修改參數。
+    Mytatis提供了3種方式讓我們使用properties，分別是：
+        （1）property標籤，（2）properties文件和（3）程序代碼传递。
+    三种方式配置的参数是有优先级的，3 > 2 > 1   如果配置的参数有重合，高优先级的配置会把低优先级的覆盖掉。
+    -->
+    <properties> <!-- （2）<properties resource="jdbc.properties">  使用resource属性引用准备好的properties文件 -->
+        <!-- （1） -->
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://www.wooread.com:3306/test_db"/>
+        <property name="username" value="root"/>
+        <property name="password" value="xxxxx"/>
+    </properties>
+    <!-- 
+                 （3）程序代码传递参数，主要是在使用代码创建SqlSessionFactory时传递一个Properties对象，一般用的不多。
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream,properties); 
+    -->
+    
+    <settings><!-- 最重要的配置标签，一般情况下使用默认配置就可以，详细内容参照http://www.mybatis.org/mybatis-3/configuration.html -->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+    
+    <typeAliases>
+    <!-- 
+                    主要是一个类的全限定名太长了，使用不方便，所以为一个类使用别名，就可以简单的引用别名来标示这个类。
+     Mybatis对于java内置的类型都已经设置了别名。
+    -->
+        <!-- 
+                            设置一个别名
+            <typeAlias type="type" alias="alia_name"/>
+         -->
+        <!-- 
+                            自动扫描一个包下的类
+            <package name=""/>
+        -->
+        <package name="com.wooread.mybatisstudy.model"/>
+    </typeAliases>
+    
+    <typeHandlers>
+    <!-- 
+        type handler是为了能够在javaType和jdbcType之间进行转换。
+     -->
+        <!-- <typeHandler handler=""/> -->
+        <!-- 在这里配置的typeHandler在全局起作用 -->
+        <!-- 也可以在配置<resultMap>标签时显式的指定自定义的typeHandler -->
+        
+    </typeHandlers>
+
+  <environments default="development">
+    <environment id="development"><!-- 根据不同的开发阶段可以有不同的数据库配置 -->
+      
+      <transactionManager type="JDBC"/>
+      <!-- 
+                    有两个可选配置，JDBC 和  MANAGED （这两个名称其实都是别名，如果想使用自己的transactionManager就在这里写上全限定名或者类的别名，前提是这个类实现了TransactionFactory）
+         JDBC:直接使用JDBC的提交，回滚功能。依赖于从数据源获取的Connection来管理事物的范围。
+         MANAGED:什么都不做，使用容器来管理事务的整个生命周期。默认行为是关闭Connection，有的容器可能并不期待这个默认行为，所以如果想关闭这个默认行为，可以添加一个property属性：
+         <property name="closeConnection" value="false"/>
+         
+                    如果项目使用Spring和Mybatis结合，就不需要配置任何的transactionManager,因为Spring的transactionManager配置会覆盖掉任何先前的配置。   
+       -->
+      
+      <dataSource type="UNPOOLED">
+        <!-- 
+                        配置数据源的类型，有三个可选配置：POOLED,JNDI,UNPOOLED
+          UNPOOLED:在每次使用数据库连接时只是简单的打开或者关闭。所以性能不是很好，只适用于对于性能要求不是很高的应用。
+                       配置一个UNPOOLED数据源只需要下面五个属性就可以：
+         -->
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <!-- <property name="defaultTransactionIsolationLevel" value="${defaultTransactionIsolationLevel}"/> --><!-- 默认的事物隔离级别 -->
+        
+        <!-- 
+            POOLED类型的数据源：这种类型的数据源会事先生成一些数据库连接，这样避免初始化连接以及认证身份所需要的时间。配置一个POOLED类型的数据源除了需要上面的属性外还需要下面的这些属性：
+            poolMaximumActiveConnections ：最大活动连接数量，默认是10
+            poolMaximumIdleConnections ：最大空闲连接数量
+            poolMaximumCheckoutTime ：This is the amount of time that a Connection can be "checked out" of the pool before it will be forcefully returned. Default: 20000ms （在被强制返回之前,池中连接被检查的时间。）
+                            
+                            未完待续。。。
+         -->
+        
+        
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <!-- <mapper resource="org/mybatis/example/BlogMapper.xml"/> -->
+    <package name="com.wooread.mybatisstudy.mapper"/>
+  </mappers>
+</configuration>
