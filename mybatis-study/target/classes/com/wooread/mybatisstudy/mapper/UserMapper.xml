@@ -3,18 +3,40 @@
 
 <mapper namespace="com.wooread.mybatisstudy.mapper.UserMapper">
     <resultMap type="User" id="User">
-        <id column="user_id" property="userId"/>
-        <result column="user_name" property="userName"/>
-        <result column="password" property="password"/>
-        <association property="userInfo" column="user_info_id" select="com.wooread.mybatisstudy.mapper.UserInfoMapper.selectById"/>
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="password" property="password" />
+        <association property="userInfo" column="user_info_id"
+            select="com.wooread.mybatisstudy.mapper.UserInfoMapper.selectById" />
+        <collection property="userTasks" column="user_id"
+            select="com.wooread.mybatisstudy.mapper.UserTaskMapper.selectByUserId" />
     </resultMap>
-    
+
     <sql id="user_columns">
         user_id,user_name,password,user_info_id
     </sql>
-    
+
     <select id="selectById" resultMap="User">
-        select <include refid="user_columns"/> from user where user_id = #{userId}
+        select
+        <include refid="user_columns" />
+        from user where user_id = #{userId}
     </select>
-    
+
+    <select id="selectByUserName" statementType="CALLABLE" resultMap="User">
+        {
+        call get_user_by_name(
+        #{userName,jdbcType=VARCHAR,mode=IN},
+        #{offset,jdbcType=NUMERIC,mode=IN},
+        #{size,jdbcType=NUMERIC,mode=IN},
+        #{totals.num,jdbcType=NUMERIC,javaType=java.lang.Integer,mode=OUT})
+        }
+        <!-- 
+            create procedure get_user_by_name(IN userName varchar(20), IN offset integer, IN size integer, OUT totals integer) 
+             begin 
+                select count(0) from user where user_name like userName into totals; 
+                select * from user where user_name like userName limit offset,size;
+             end
+        -->
+    </select>
+
 </mapper>

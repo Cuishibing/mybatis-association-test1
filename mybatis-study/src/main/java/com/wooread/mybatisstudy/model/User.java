@@ -1,10 +1,15 @@
 package com.wooread.mybatisstudy.model;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * User表的Model
  * */
-public class User {
+public class User implements Serializable{
     
+    private static final long serialVersionUID = 1L;
+
     /**
      * 用户id,主键
      * */
@@ -24,6 +29,19 @@ public class User {
      * 用户信息
      * */
     private UserInfo userInfo;
+    
+    /**
+     * 用户任务列表
+     * */
+    private List<UserTask> userTasks;
+
+    public List<UserTask> getUserTasks() {
+        return userTasks;
+    }
+
+    public void setUserTasks(List<UserTask> userTasks) {
+        this.userTasks = userTasks;
+    }
 
     public String getUserId() {
         return userId;

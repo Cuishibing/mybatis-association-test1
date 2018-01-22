@@ -17,7 +17,7 @@
         <property name="driver" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://www.wooread.com:3306/test_db"/>
         <property name="username" value="root"/>
-        <property name="password" value="xxxxx"/>
+        <property name="password" value="MyPassword1+"/>
     </properties>
     <!-- 
                  （3）程序代码传递参数，主要是在使用代码创建SqlSessionFactory时传递一个Properties对象，一般用的不多。
@@ -26,6 +26,8 @@
     
     <settings><!-- 最重要的配置标签，一般情况下使用默认配置就可以，详细内容参照http://www.mybatis.org/mybatis-3/configuration.html -->
         <setting name="cacheEnabled" value="true"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="true"/>
     </settings>
     
     <typeAliases>

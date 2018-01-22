@@ -1,10 +1,14 @@
 package com.wooread.mybatisstudy.model;
 
+import java.io.Serializable;
+
 /**
  * 用户信息表对应的Model
  * */
-public class UserInfo {
+public class UserInfo implements Serializable{
     
+    private static final long serialVersionUID = 1L;
+
     /**
      * 用户信息id,主键
      * */
